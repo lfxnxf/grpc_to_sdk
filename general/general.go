@@ -86,6 +86,9 @@ func (g *General) SetData() {
 				g.modelMap[modelName][newModelName] = newModelName
 			} else {
 				modelName = GetItemName(v)
+				if _, ok := g.modelMap[modelName]; !ok {
+					g.modelMap[modelName] = make(map[string]string)
+				}
 			}
 			break
 		case IsRightBraces(v) && !g.BracesOver():
@@ -102,9 +105,6 @@ func (g *General) SetData() {
 		//设置message to model
 		s := strings.Split(v, " ")
 		if !g.BracesOver() && !IsMessage(v) {
-			if _, ok := g.modelMap[modelName]; !ok {
-				g.modelMap[modelName] = make(map[string]string)
-			}
 			if s[0] == "repeated" {
 				g.modelMap[modelName][GetEqual(s[2])] = "[]" + s[1]
 			} else {
