@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"protobuf_to_sdk/general"
+	"github.com/lfxnxf/protobuf_to_sdk/general"
 )
 
 var g *general.General

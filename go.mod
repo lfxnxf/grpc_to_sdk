@@ -1,4 +1,4 @@
-module protobuf_to_sdk
+module github.com/lfxnxf/protobuf_to_sdk
 
 go 1.14
 

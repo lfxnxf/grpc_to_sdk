@@ -3,10 +3,10 @@ package general
 import (
 	"errors"
 	"fmt"
+	"github.com/lfxnxf/protobuf_to_sdk/tpl"
+	"github.com/lfxnxf/protobuf_to_sdk/utils"
 	"io/ioutil"
 	"os"
-	"protobuf_to_sdk/tpl"
-	"protobuf_to_sdk/utils"
 	"strings"
 	"sync"
 )
