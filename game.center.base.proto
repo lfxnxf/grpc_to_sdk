@@ -1,117 +1,176 @@
 syntax = "proto3";
-package game_center_base;
+package activity;
 
-message InvitationEmptyResp {
-    int64 dm_error = 1;
-    string error_msg = 2;
+// 签到
+message SignInReq {
+    int64 uid = 1; // 用户 id
 }
+message SignInResp {
+    message Data {
+        repeated Item items = 1; // 赠送列表
+    }
 
-message InvitationIdResp {
+    message Item {
+        int64 id = 1; // 标记签到礼物类型
+        int64 num = 2; // 数量
+        int64 param = 3; // 如奖励为物品时，这个字段表示物品ID
+        int64 duration = 4; // 有效期
+        string icon = 5; // icon
+        string num_text = 6; // 数量文案
+        string desc_text = 7; // 描述文案
+    }
+
     int64 dm_error = 1;
     string error_msg = 2;
-    message Data {
-        string invitation_id = 1;
-    }
     Data data = 3;
 }
 
-message SetInvitationInfoReq {
-    int64 uid = 1;
-    int64 target_uid = 2;
-    int64 game_type = 3;
-    int64 game_mode = 4;
-    int64 source = 5;
-    string room_id = 6;
+// 获取签到列表
+message SignInListReq {
+    int64 uid = 1; // 用户 id
 }
-
-message InvitationIdReq {
-    int64 uid = 1;
-    string invitation_id = 2;
-}
-
-message UidReq {
-    int64 uid = 1;
-}
-
-message DontDisturbStatus {
-    int64 status = 1;
-}
-
-message GetInvitationInfoResp {
-    int64 dm_error = 1;
-    string error_msg = 2;
-    InvitationInfoData data = 3;
-}
-
-message InvitationInfoData {
-    string invitation_id = 1;
-    int64 sender = 2;
-    int64 receive = 3;
-    GameInfo game_info = 4;
-    int64 create_at = 5;
-    int64 status = 6;
-    string room_id = 7;
-    int64 source = 8;
-}
-
-message UserInfo {
-    string nick = 1;
-    string portrait = 2;
-}
-
-message GameInfo {
-    string game_name = 1;
-    string game_mode_text = 2;
-    int64 game_type = 3;
-    int64 game_mode = 4;
-    string game_icon = 5;
-}
-
-message InvitationFreqSingleReq {
-    int64 uid = 1;
-    int64 target_uid = 2;
-}
-
-message InvitationFreqSingleResp {
-    int64 dm_error = 1;
-    string error_msg = 2;
+message SignInListResp {
     message Data {
-        int64 remaining_time = 1;
-        bool is_can = 2;
+        repeated Day days = 1;
+        bool signed = 2; // 今天是否已经签到
     }
+
+    message Day {
+        repeated Item items = 1; // 赠送列表
+        bool signed = 2; // 是否已经签到
+    }
+
+    message Item {
+        int64 id = 1; // 标记签到礼物类型
+        int64 num = 2; // 数量
+        int64 param = 3; // 如奖励为物品时，这个字段表示物品ID
+        int64 duration = 4; // 有效期
+        string icon = 5; // icon
+        string num_text = 6; // 数量文案
+        string desc_text = 7; // 描述文案
+    }
+
+    int64 dm_error = 1;
+    string error_msg = 2;
     Data data = 3;
 }
 
-message SetContinuousRefusedReq {
-    int64 uid = 1;
-    int64 status = 2;
+// 是否已经签到
+message SignedReq {
+    int64 uid = 1; // 用户 id
 }
+message SignedResp {
+    message Data {
+        bool signed = 1; // 是否已经签到
+    }
 
-message ContinuousRefusedResp {
     int64 dm_error = 1;
     string error_msg = 2;
-    message Data {
-        int64 is_show_dont_dis = 1;
-    }
     Data data = 3;
 }
 
-message SetInvitationRoomIdReq {
-    string invitation_id = 1;
-    string room_id = 2;
+// 测试
+message TestGoldCompensateReq {
+    int64 uid = 1; // 用户 id
+}
+message TestGoldCompensateResp {
+    int64 dm_error = 1;
+    string error_msg = 2;
 }
 
-service GameCenterService {
-    rpc GetInvitationSenderStatus (UidReq) returns (InvitationIdResp); // 获取用户发送邀请信息
-    rpc SetInvitationInfo (SetInvitationInfoReq) returns (InvitationIdResp); // 设置邀请信息
-    rpc GetInvitationInfo (InvitationIdReq) returns (GetInvitationInfoResp); // 获取邀请信息
-    rpc InvitationAccept (InvitationIdReq) returns (InvitationEmptyResp); // 用户接受邀请
-    rpc InvitationCancel (InvitationIdReq) returns (InvitationEmptyResp); // 取消邀请
-    rpc InvitationRefused (InvitationIdReq) returns (InvitationEmptyResp); // 用户拒绝
-    rpc InvitationDontDisturb (UidReq) returns (InvitationEmptyResp); // 免打扰
-    rpc GetInvitationDontDisturbStatus (UidReq) returns (DontDisturbStatus); // 获取免打扰状态
-    rpc SetContinuousRefused (SetContinuousRefusedReq) returns (ContinuousRefusedResp); // 设置连续拒绝次数
-    rpc GetContinuousRefused (UidReq) returns (ContinuousRefusedResp); // 获取连续拒绝状态
-    rpc SetInvitationRoomId (SetInvitationRoomIdReq) returns (InvitationEmptyResp); // 设置room_id
-    rpc InvitationFreqSingle (InvitationFreqSingleReq) returns (InvitationFreqSingleResp); // 频控
+message RotaryDrawRecordReq {
+    int64 uid = 1;
+    int64 activity_id = 2;
+    int64 num = 3;
+    int64 prize_type = 4;
+    string prize_ext = 5;
+    int64 prize_id = 6;
+}
+
+message RotaryDrawRecordResp {
+    int64 dm_error = 1;
+    string error_msg = 2;
+}
+
+// 获取用户充值礼包次数信息
+message GetUserGiftBagPurchaseTimesReq {
+    int64 uid = 1;
+    int64 activity_id = 2;
+}
+
+message GetUserGiftBagPurchaseTimesResp {
+    message Data {
+        repeated GiftBagPurchaseInfo info = 1;
+    }
+
+    message GiftBagPurchaseInfo {
+        int64 gift_bag_id = 1;
+        int32 times = 2;
+    }
+
+    int64 dm_error = 1;
+    string error_msg = 2;
+    Data data = 3;
+}
+
+// 写入用户充值礼包信息
+message InsertUserGiftBagPurchaseRecordReq {
+    int64 uid = 1;
+    int64 activity_id = 2;
+    int64 gift_bag_id = 3;
+    string order_id = 4;
+}
+
+message InsertUserGiftBagPurchaseRecordResp {
+    int64 dm_error = 1;
+    string error_msg = 2;
+}
+
+// 写入充值礼包奖励下发记录
+message InsertGiftBagAwardSendRecordReq {
+    int64 uid = 1;
+    int64 activity_id = 2;
+    int64 gift_bag_id = 3;
+    AwardInfo award_info = 4;
+
+    message AwardInfo {
+        int64 prop_id = 1;
+        int32 type = 2;
+        int64 num = 3;
+        int64 time = 4;
+    }
+}
+
+message InsertGiftBagAwardSendRecordResp {
+    message Data {
+        string send_id = 1;
+    }
+
+    int64 dm_error = 1;
+    string error_msg = 2;
+    Data data = 3;
+}
+
+// 更新充值礼包奖励下发记录
+message UpdateGiftBagAwardSendRecordReq {
+    string send_id = 1;
+    int64 uid = 2;
+}
+
+message UpdateGiftBagAwardSendRecordResp {
+    int64 dm_error = 1;
+    string error_msg = 2;
+}
+
+service ActivityService {
+    // 签到活动
+    rpc SignIn (SignInReq) returns (SignInResp); // 签到
+    rpc SignInList (SignInListReq) returns (SignInListResp); // 签到列表
+    rpc Signed (SignedReq) returns (SignedResp); // 是否已经签到
+    rpc TestGoldCompensate (TestGoldCompensateReq) returns (TestGoldCompensateResp); // 测试金币补偿
+    rpc CreateRotaryDrawRecord (RotaryDrawRecordReq) returns (RotaryDrawRecordResp); // 创建
+    rpc GetUserGiftBagPurchaseTimes (GetUserGiftBagPurchaseTimesReq) returns (GetUserGiftBagPurchaseTimesResp); // 获取用户充值礼包次数信息
+    rpc InsertUserGiftBagPurchaseRecord (InsertUserGiftBagPurchaseRecordReq) returns (InsertUserGiftBagPurchaseRecordResp); // 写入用户充值礼包信息
+    rpc InsertGiftBagAwardSendRecord (InsertGiftBagAwardSendRecordReq) returns (InsertGiftBagAwardSendRecordResp); // 写入充值礼包奖励下发记录
+    rpc UpdateGiftBagAwardSendRecord (UpdateGiftBagAwardSendRecordReq) returns (UpdateGiftBagAwardSendRecordResp); // 更新充值礼包奖励下发记录
 }

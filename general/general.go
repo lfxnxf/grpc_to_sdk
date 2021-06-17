@@ -114,6 +114,9 @@ func (g *General) SetData() {
 
 		//设置service to sdk
 		if !g.ServiceBracesOver() && !IsService(v) {
+			if len(s) < 5 {
+				continue
+			}
 			if _, ok := g.sdkMap[s[1]]; !ok {
 				g.sdkMap[s[1]] = make(map[string]string)
 			}
