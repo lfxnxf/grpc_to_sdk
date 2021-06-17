@@ -113,5 +113,5 @@ service GameCenterService {
     rpc SetContinuousRefused (SetContinuousRefusedReq) returns (ContinuousRefusedResp); // 设置连续拒绝次数
     rpc GetContinuousRefused (UidReq) returns (ContinuousRefusedResp); // 获取连续拒绝状态
     rpc SetInvitationRoomId (SetInvitationRoomIdReq) returns (InvitationEmptyResp); // 设置room_id
-    rpc InvitationFreqSingle(InvitationFreqSingleReq) returns (InvitationFreqSingleResp); // 频控
+    rpc InvitationFreqSingle (InvitationFreqSingleReq) returns (InvitationFreqSingleResp); // 频控
 }
